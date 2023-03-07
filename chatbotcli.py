@@ -1,5 +1,6 @@
 """
 A simple wrapper for the official ChatGPT API
+原Repo: github.com/acheong08/ChatGPT
 """
 import argparse
 import json
@@ -10,9 +11,9 @@ from typing import NoReturn
 import requests
 import tiktoken
 
-from .utils import create_completer
-from .utils import create_session
-from .utils import get_input
+from utils import create_completer
+from utils import create_session
+from utils import get_input
 
 ENGINE = os.environ.get("GPT_ENGINE") or "gpt-3.5-turbo"
 
@@ -131,6 +132,7 @@ class Chatbot:
         self.add_to_conversation(prompt, "user", convo_id=convo_id)
         self.__truncate_conversation(convo_id=convo_id)
         # Get response
+        print("get response from chatGTP api...")
         response = self.session.post(
             "https://api.openai.com/v1/chat/completions",
             headers={"Authorization": f"Bearer {kwargs.get('api_key', self.api_key)}"},
@@ -146,6 +148,7 @@ class Chatbot:
                 # "max_tokens": self.get_max_tokens(convo_id=convo_id),
             },
             stream=True,
+            timeout=60
         )
         if response.status_code != 200:
             raise Exception(
@@ -340,8 +343,8 @@ def main() -> NoReturn:
     """
     print(
         """
-    ChatGPT - Official ChatGPT API
-    Repo: github.com/acheong08/ChatGPT
+    iChatGPT- Command-line request for the Official ChatGPT API
+    Repo: github.com/ilinxiao/ichatbot 
     """,
     )
     print("Type '!help' to show a full list of commands")
